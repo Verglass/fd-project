@@ -21,7 +21,7 @@ const ProductDetails = () => {
     useEffect(() => {
         if (!product) dispatch(fetchDetails(productId))
         if (!avgScore) dispatch(fetchScores(productId))
-        if (!deliveryOptions) dispatch(fetchDeliveryOptions())
+        if (!deliveryOptions.length) dispatch(fetchDeliveryOptions())
     }, [])
 
     return (
