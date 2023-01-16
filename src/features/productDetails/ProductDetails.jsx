@@ -50,6 +50,7 @@ const ProductDetails = () => {
                             <div className='flex items-center gap-x-6'>
                                 {admin && <button className='bg-zinc-700 hover:bg-zinc-600 h-fit text-zinc-50 p-2 rounded' onClick={() => navigate('/deliveryOptions')}>Delivery options</button>}
                                 <div className='flex flex-col items-end'>
+                                    <div className='font-bold  text-zinc-600'>In stock: {product.quantity}</div>
                                     <div className='font-bold text-zinc-600'>Delivery options: </div>
                                     {deliveryOptions.map(option => (
                                         <div className='flex gap-x-2 text-zinc-500' key={option._id}>
