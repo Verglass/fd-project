@@ -21,6 +21,16 @@ export const fetchFilteredProducts = createAsyncThunk('products/fetchFilteredPro
     return [...res.data.products]
 })
 
+export const updateProduct = createAsyncThunk('products/updateProduct', async (values) => {
+    const res = await axios.put(`/products/${values.productId}`, values)
+    return res.data.product
+})
+
+export const deleteProduct = createAsyncThunk('products/deleteProduct', async (productId) => {
+    const res = await axios.delete(`/products/${productId}`)
+    return res.data.productId
+})
+
 const productsSlice = createSlice({
     name: 'products',
     initialState,
@@ -36,6 +46,15 @@ const productsSlice = createSlice({
             })
             .addCase(fetchFilteredProducts.fulfilled, (state, action) => {
                 state.products = action.payload
+            })
+            .addCase(updateProduct.fulfilled, (state, action) => {
+                state.products = state.products.map(product => {
+                    if (product._id === action.payload._id) product = action.payload
+                    return product
+                })
+            })
+            .addCase(deleteProduct.fulfilled, (state, action) => {
+                state.products = state.products.filter(product => product._id !== action.payload)
             })
     }
 

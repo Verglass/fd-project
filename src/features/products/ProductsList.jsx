@@ -30,7 +30,7 @@ const ProductsList = () => {
           {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 mb-4 p-2 rounded' onClick={() => navigate('/add')}>Add Product</button>}
           <div className='bg-zinc-100 p-5'>
             {products.slice(page * 3, page * 3 + 3).map(product =>
-              <ProductsExcerpt key={product.id} product={product} />
+              <ProductsExcerpt key={product._id} product={product} />
             )}
             <div className='flex justify-end gap-10'>
               {page > 0 && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${page - 1}`)}>Previous</button>}

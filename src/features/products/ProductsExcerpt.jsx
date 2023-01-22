@@ -1,10 +1,21 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectUserToken, addProductToCart } from '../cart/cartSlice'
 
 const ProductsExcerpt = ({ product }) => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const token = useSelector(selectUserToken)
+
+    const values = {
+        productId: product._id,
+        quantity: 1,
+        userToken: token
+    }
+
     return (
-        <div className='w-full border-2 border-zinc-300 mb-5' key={product.id}>
+        <div className='w-full border-2 border-zinc-300 mb-5' key={product._id}>
             <h3 className='bg-zinc-300 text-3xl font-bold text-center'>{product.title}</h3>
             <div className='flex justify-between'>
                 <div className='flex'>
@@ -18,8 +29,8 @@ const ProductsExcerpt = ({ product }) => {
                         <h4 className='font-light'>in stock: {product.quantity}</h4>
                     </div>
                     <div className='flex gap-x-5'>
-                        <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${product.id}/details`)}>Details</button>
-                        <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded'>Add to cart</button>
+                        <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${product._id}/details`)}>Details</button>
+                        <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => dispatch(addProductToCart(values))}>Add to cart</button>
                     </div>
                 </div>
             </div>

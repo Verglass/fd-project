@@ -25,10 +25,9 @@ const ProductsFilters = () => {
                     maxPrice: Yup.number().required('Required'),
                     type: Yup.string().required('Required'),
                 })}
-                onSubmit={async (values, { setSubmitting, resetForm }) => {
+                onSubmit={async (values, { setSubmitting }) => {
                     await handleSubmit(values)
                     setSubmitting(false)
-                    resetForm()
                 }}
             >
                 {({ isSubmitting }) => (

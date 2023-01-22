@@ -5,6 +5,7 @@ import scoresReducer from '../features/scores/scoresSlice'
 import commentsReducer from '../features/comments/commentsSlice'
 import productDetailsReducer from '../features/productDetails/productDetailsSlice'
 import deliveryOptionsReducer from '../features/deliveryOptions/deliveryOptionsSlice'
+import cartReducer from '../features/cart/cartSlice'
 
 export const store = configureStore({
     reducer: {
@@ -14,5 +15,6 @@ export const store = configureStore({
         comments: commentsReducer,
         details: productDetailsReducer,
         deliveryOptions: deliveryOptionsReducer,
+        cart: cartReducer,
     }
 })

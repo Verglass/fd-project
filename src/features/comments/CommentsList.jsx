@@ -31,11 +31,10 @@ const CommentsList = () => {
                     validationSchema={Yup.object({
                         comment: Yup.string().max(150, 'Too long').required('Required'),
                     })}
-                    onSubmit={async (values, { setSubmitting, resetForm }) => {
+                    onSubmit={async (values, { setSubmitting }) => {
                         values.productId = productId
                         await dispatch(addComment(values))
                         setSubmitting(false)
-                        resetForm()
                     }}
                 >
                     {({ isSubmitting }) => (
