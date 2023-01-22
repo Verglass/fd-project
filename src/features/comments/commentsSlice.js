@@ -20,8 +20,8 @@ export const deleteComment = createAsyncThunk('comments/deleteComment', async (c
     return { commentId: res.data.commentId, productId: res.data.productId }
 })
 
-export const fetchSortedComments = createAsyncThunk('comments/fetchSortedComments', async (values) => {
-    const res = await axios.get(`/comment/${values.productId}/${values.order}`)
+export const fetchFilteredComments = createAsyncThunk('comments/fetchFilteredComments', async (values) => {
+    const res = await axios.post(`/comment/${values.productId}`, values)
     return { comments: res.data.comments, productId: values.productId }
 })
 
@@ -41,7 +41,7 @@ const commentsSlice = createSlice({
             .addCase(deleteComment.fulfilled, (state, action) => {
                 state.comments[action.payload.productId] = state.comments[action.payload.productId].filter(comment => comment._id !== action.payload.commentId)
             })
-            .addCase(fetchSortedComments.fulfilled, (state, action) => {
+            .addCase(fetchFilteredComments.fulfilled, (state, action) => {
                 if (action.payload.comments === undefined) action.payload.comments = []
                 state.comments[action.payload.productId] = [...action.payload.comments]
             })

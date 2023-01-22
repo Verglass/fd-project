@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
@@ -5,6 +6,8 @@ import { fetchFilteredProducts } from './productsSlice'
 
 const ProductsFilters = () => {
     const dispatch = useDispatch()
+
+    const [filters, setFilters] = useState({})
 
     const handleSubmit = async (values) => {
         dispatch(fetchFilteredProducts(values))
@@ -27,6 +30,7 @@ const ProductsFilters = () => {
                 })}
                 onSubmit={async (values, { setSubmitting }) => {
                     await handleSubmit(values)
+                    setFilters(values)
                     setSubmitting(false)
                 }}
             >
@@ -78,6 +82,15 @@ const ProductsFilters = () => {
                     </Form>
                 )}
             </Formik>
+            {Object.keys(filters).length ?
+                <div className='bg-zinc-700 text-zinc-50 h-fit rounded mt-5 mx-16 p-5 flex flex-col gap-y-5'>
+                    <p>order: {filters.order}</p>
+                    <p>min. price: {filters.minPrice}</p>
+                    <p>max. price: {filters.maxPrice}</p>
+                    <p>type: {filters.type}</p>
+                </div>
+                : null
+            }
         </div>
     )
 }

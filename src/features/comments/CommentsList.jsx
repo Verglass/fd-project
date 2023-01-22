@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectCommentsById, fetchComments, addComment, deleteComment, fetchSortedComments } from './commentsSlice'
+import { selectCommentsById, fetchComments, addComment, deleteComment, fetchFilteredComments } from './commentsSlice'
 import { selectAdmin } from '../layout/adminSlice'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
@@ -17,6 +17,8 @@ const CommentsList = () => {
     const comments = useSelector(selectCommentsById(productId))
     const admin = useSelector(selectAdmin)
 
+    const [filters, setFilters] = useState({})
+
     useEffect(() => {
         if (!comments) dispatch(fetchComments(productId))
     }, [])
@@ -29,12 +31,13 @@ const CommentsList = () => {
                         comment: '',
                     }}
                     validationSchema={Yup.object({
-                        comment: Yup.string().max(150, 'Too long').required('Required'),
+                        comment: Yup.string().max(125, 'Too long').required('Required'),
                     })}
-                    onSubmit={async (values, { setSubmitting }) => {
+                    onSubmit={async (values, { setSubmitting, resetForm }) => {
                         values.productId = productId
                         await dispatch(addComment(values))
                         setSubmitting(false)
+                        resetForm()
                     }}
                 >
                     {({ isSubmitting }) => (
@@ -57,15 +60,21 @@ const CommentsList = () => {
                         <Formik
                             initialValues={{
                                 order: 'oldest',
+                                minDate: '',
+                                maxDate: '',
+                                template: '',
                             }}
                             validationSchema={Yup.object({
                                 order: Yup.string().required('Required'),
+                                minDate: Yup.date(),
+                                maxDate: Yup.date(),
+                                template: Yup.string(),
                             })}
-                            onSubmit={async (values, { setSubmitting, resetForm }) => {
+                            onSubmit={async (values, { setSubmitting }) => {
                                 values.productId = productId
-                                await dispatch(fetchSortedComments(values))
+                                await dispatch(fetchFilteredComments(values))
+                                setFilters(values)
                                 setSubmitting(false)
-                                resetForm()
                             }}
                         >
                             {({ isSubmitting }) => (
@@ -80,15 +89,42 @@ const CommentsList = () => {
                                         <ErrorMessage className='text-rose-500' component="span" name="order" />
                                     </div>
 
+                                    <div className='flex flex-col gap-y-0.5'>
+                                        <label htmlFor="minDate">newer than:</label>
+                                        <Field className='bg-zinc-800' name="minDate" type="date" />
+                                        <ErrorMessage className='text-rose-500' component="span" name="minDate" />
+                                    </div>
+
+                                    <div className='flex flex-col gap-y-0.5'>
+                                        <label htmlFor="maxDate">older than:</label>
+                                        <Field className='bg-zinc-800' name="maxDate" type="date" />
+                                        <ErrorMessage className='text-rose-500' component="span" name="maxDate" />
+                                    </div>
+
+                                    <div className='flex flex-col gap-y-0.5'>
+                                        <label htmlFor="template">including:</label>
+                                        <Field className='bg-zinc-800' name="template" />
+                                        <ErrorMessage className='text-rose-500' component="span" name="template" />
+                                    </div>
+
                                     <button className='p-5 hover:bg-zinc-600' type="submit" disabled={isSubmitting}>apply</button>
                                 </Form>
                             )}
                         </Formik>
+                        {Object.keys(filters).length ?
+                            <div className='bg-zinc-700 text-zinc-50 h-fit rounded mt-5 mx-16 p-5 flex flex-col gap-y-5'>
+                                <p>order: {filters.order}</p>
+                                {filters.minDate && <p>newer than: {filters.minDate}</p>}
+                                {filters.maxDate && <p>older than: {filters.maxDate}</p>}
+                                {filters.template && <p>template: {filters.template}</p>}
+                            </div>
+                            : null
+                        }
                     </div>
-                    <div className='bg-zinc-300 col-span-2 p-5 rounded'>
+                    <div className='bg-zinc-300 h-fit col-span-2 p-5 rounded'>
                         {comments.slice(page * num, page * num + num).map(comment => (
-                            <div className='mb-5 flex items-center gap-x-4'>
-                                <div className='bg-zinc-700 text-zinc-50 p-5 rounded grow' key={comment._id}>
+                            <div className='mb-5 flex items-center gap-x-4' key={comment._id}>
+                                <div className='bg-zinc-700 text-zinc-50 p-5 rounded grow'>
                                     <div>{comment.comment}</div>
                                     <div className='text-zinc-300 text-right text-sm'>{new Date(comment.date).toLocaleString()}</div>
                                 </div>
