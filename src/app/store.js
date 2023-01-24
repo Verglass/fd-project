@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger'
 import productsReducer from '../features/products/productsSlice'
 import adminReducer from '../features/layout/adminSlice'
 import scoresReducer from '../features/scores/scoresSlice'
@@ -16,5 +17,6 @@ export const store = configureStore({
         details: productDetailsReducer,
         deliveryOptions: deliveryOptionsReducer,
         cart: cartReducer,
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 })

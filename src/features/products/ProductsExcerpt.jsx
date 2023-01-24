@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectUserToken, addProductToCart } from '../cart/cartSlice'
@@ -21,12 +21,16 @@ const ProductsExcerpt = ({ product }) => {
         userToken: token
     }
 
+    useEffect(() => {
+        if (!comments) dispatch(fetchComments(product._id))
+    }, [])
+
     return (
         <div className='w-full border-2 border-zinc-300 mb-5' key={product._id}>
             <h3 className='bg-zinc-300 text-3xl font-bold text-center'>{product.title}</h3>
             <div className='flex justify-between'>
-                <div className='flex'>
-                    <img className='h-52' src={product.picture} alt={product.title} />
+                <div className='flex items-center'>
+                    <img className='h-52 p-3' src={product.picture} alt={product.title} />
                     <h4 className='p-4'>{product.shortDescription}</h4>
                 </div>
                 <div className='text-right w-fit shrink-0 p-5 flex flex-col justify-between'>
@@ -40,7 +44,7 @@ const ProductsExcerpt = ({ product }) => {
                         <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => dispatch(addProductToCart(values))}>Add to cart</button>
                     </div>
                     <div>
-                        {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => { fetchComments(product._id); setCommentsActive(!commentsActive) }}>Toggle comments</button>}
+                        {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => setCommentsActive(!commentsActive)}>Toggle comments</button>}
                     </div>
                 </div>
             </div>
