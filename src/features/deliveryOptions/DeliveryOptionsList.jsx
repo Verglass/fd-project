@@ -60,10 +60,10 @@ const DeliveryOptionsList = () => {
                 <div className='text-xl w-fit flex flex-wrap gap-5 col-span-2'>
                     {deliveryOptions.map(option => (
                         <div className='bg-zinc-700 text-zinc-50 h-fit p-3 flex flex-col justify-center items-center gap-y-3 rounded-xl' key={option._id}>
-                            <dic className='flex flex-col gap-y-0.5'>
+                            <div className='flex flex-col gap-y-0.5'>
                                 <div>{polish ? 'metoda:' : 'method:'} {option.method}</div>
                                 <div>{polish ? 'cena:' : 'price:'} {option.price}</div>
-                            </dic>
+                            </div>
                             <button className='bg-zinc-800 hover:bg-zinc-600 outline outline-3 outline-rose-500 p-2 rounded-lg' onClick={() => dispatch(deleteDeliveryOption(option._id))}>{polish ? 'USUŃ' : 'DELETE'}</button>
                         </div>
                     ))}
