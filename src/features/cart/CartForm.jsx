@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { selectDeliveryOptions } from '../deliveryOptions/deliveryOptionsSlice'
+import { selectLanguage } from '../layout/languageSlice'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
@@ -8,6 +9,7 @@ const CartForm = () => {
     const navigate = useNavigate()
 
     const deliveryOptions = useSelector(selectDeliveryOptions)
+    const polish = useSelector(selectLanguage)
 
     return (
         <Formik
@@ -34,7 +36,7 @@ const CartForm = () => {
         >
             {({ isSubmitting }) => (
                 <Form className='bg-zinc-700 text-zinc-50 text-xl container rounded mt-24 p-5 flex flex-col gap-y-5'>
-                    <div id="my-radio-group">delivery option:
+                    <div id="my-radio-group">{polish ? 'opcje dostawy:' : 'delivery option:'}
                         <div className='flex gap-x-5' role="group" aria-labelledby="my-radio-group">
                             {deliveryOptions.length
                                 ?
@@ -65,30 +67,30 @@ const CartForm = () => {
                     </div>
 
                     <div className='flex flex-col gap-y-0.5'>
-                        <label htmlFor="address1">address line 1</label>
+                        <label htmlFor="address1">{polish ? 'adres 1' : 'address line 1'}</label>
                         <Field className='bg-zinc-800' name="address1" />
                         <ErrorMessage className='text-rose-500' component="span" name="address1" />
                     </div>
 
                     <div className='flex flex-col gap-y-0.5'>
-                        <label htmlFor="address2">address line 2 (optional)</label>
+                        <label htmlFor="address2">{polish ? 'adres 2 (opcjonalny)' : 'address line 2 (optional)'}</label>
                         <Field className='bg-zinc-800' name="address2" />
                         <ErrorMessage className='text-rose-500' component="span" name="address2" />
                     </div>
 
                     <div className='flex flex-col gap-y-0.5'>
-                        <label htmlFor="city">city</label>
+                        <label htmlFor="city">{polish ? 'miasto' : 'city'}</label>
                         <Field className='bg-zinc-800' name="city" />
                         <ErrorMessage className='text-rose-500' component="span" name="city" />
                     </div>
 
                     <div className='flex flex-col gap-y-0.5'>
-                        <label htmlFor="zip">ZIP/postcode</label>
+                        <label htmlFor="zip">{polish ? 'kod pocztowy' : 'ZIP/postcode'}</label>
                         <Field className='bg-zinc-800' name="zip" />
                         <ErrorMessage className='text-rose-500' component="span" name="zip" />
                     </div>
 
-                    <button className='p-5 hover:bg-zinc-600' type="submit" disabled={isSubmitting}>Proceed</button>
+                    <button className='p-5 hover:bg-zinc-600' type="submit" disabled={isSubmitting}>{polish ? 'Dalej' : 'Proceed'}</button>
                 </Form>
             )}
         </Formik>

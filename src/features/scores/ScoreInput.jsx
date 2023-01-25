@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { addScore } from './scoresSlice'
+import { selectLanguage } from '../layout/languageSlice'
 
 const ScoreInput = () => {
     const { productId } = useParams()
     const dispatch = useDispatch()
+
+    const polish = useSelector(selectLanguage)
 
     const [rating, setRating] = useState(0)
     const [hover, setHover] = useState(0)
@@ -32,7 +35,7 @@ const ScoreInput = () => {
                 }
                 )}
             </div>
-            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 text-xl p-2 rounded' onClick={() => dispatch(addScore({ score: rating, productId: productId }))}>Leave a rating</button>
+            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 text-xl p-2 rounded' onClick={() => dispatch(addScore({ score: rating, productId: productId }))}>{polish ? 'Zostaw ocenę' : 'Leave a rating'}</button>
         </div>
     )
 }

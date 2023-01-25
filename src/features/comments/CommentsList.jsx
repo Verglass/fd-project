@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectCommentsById, fetchComments, addComment, deleteComment, fetchFilteredComments } from './commentsSlice'
 import { selectAdmin } from '../layout/adminSlice'
+import { selectLanguage } from '../layout/languageSlice'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
@@ -16,6 +17,7 @@ const CommentsList = () => {
 
     const comments = useSelector(selectCommentsById(productId))
     const admin = useSelector(selectAdmin)
+    const polish = useSelector(selectLanguage)
 
     const [filters, setFilters] = useState({})
 
@@ -42,14 +44,14 @@ const CommentsList = () => {
                 >
                     {({ isSubmitting }) => (
                         <Form className='bg-zinc-200 text-xl container rounded mt-16 p-5 flex items-center gap-x-5'>
-                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 h-fit p-2 rounded' type="button" onClick={() => navigate(`/${productId}/details`)}>Go back</button>
+                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 h-fit p-2 rounded' type="button" onClick={() => navigate(`/${productId}/details`)}>{polish ? 'Wróć' : 'Go back'}</button>
 
                             <div className='flex flex-col gap-y-0.5'>
                                 <Field name="comment" as="textarea" />
                                 <ErrorMessage className='text-rose-500' component="span" name="comment" />
                             </div>
 
-                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 h-fit p-2 rounded' type="submit" disabled={isSubmitting}>Leave a comment</button>
+                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 h-fit p-2 rounded' type="submit" disabled={isSubmitting}>{polish ? 'Zostaw komentarz' : 'Leave a comment'}</button>
                         </Form>
                     )}
                 </Formik>
@@ -80,43 +82,43 @@ const CommentsList = () => {
                             {({ isSubmitting }) => (
                                 <Form className='bg-zinc-700 text-zinc-50 h-fit rounded mx-16 p-5 flex flex-col gap-y-5'>
                                     <div className='flex flex-col gap-y-0.5'>
-                                        <label htmlFor="order">order:</label>
+                                        <label htmlFor="order">{polish ? 'porządek:' : 'order:'}</label>
                                         <Field className='bg-zinc-800' name="order" as='select'>
-                                            <option value="oldest">oldest products</option>
-                                            <option value="newest">newest products</option>
-                                            <option value="alphabetical">alphabetical</option>
+                                            <option value="oldest">{polish ? 'najstarsze komentarze' : 'oldest comments'}</option>
+                                            <option value="newest">{polish ? 'najnowsze komentarze' : 'newest comments'}</option>
+                                            <option value="alphabetical">{polish ? 'alfabetyczny' : 'alphabetical'}</option>
                                         </Field>
                                         <ErrorMessage className='text-rose-500' component="span" name="order" />
                                     </div>
 
                                     <div className='flex flex-col gap-y-0.5'>
-                                        <label htmlFor="minDate">newer than:</label>
+                                        <label htmlFor="minDate">{polish ? 'nowsze niż:' : 'newer than:'}</label>
                                         <Field className='bg-zinc-800' name="minDate" type="date" />
                                         <ErrorMessage className='text-rose-500' component="span" name="minDate" />
                                     </div>
 
                                     <div className='flex flex-col gap-y-0.5'>
-                                        <label htmlFor="maxDate">older than:</label>
+                                        <label htmlFor="maxDate">{polish ? 'starsze niż:' : 'older than:'}</label>
                                         <Field className='bg-zinc-800' name="maxDate" type="date" />
                                         <ErrorMessage className='text-rose-500' component="span" name="maxDate" />
                                     </div>
 
                                     <div className='flex flex-col gap-y-0.5'>
-                                        <label htmlFor="template">including:</label>
+                                        <label htmlFor="template">{polish ? 'zawierające:' : 'including:'}</label>
                                         <Field className='bg-zinc-800' name="template" />
                                         <ErrorMessage className='text-rose-500' component="span" name="template" />
                                     </div>
 
-                                    <button className='p-5 hover:bg-zinc-600' type="submit" disabled={isSubmitting}>apply</button>
+                                    <button className='p-5 hover:bg-zinc-600' type="submit" disabled={isSubmitting}>{polish ? 'zastosuj' : 'apply'}</button>
                                 </Form>
                             )}
                         </Formik>
                         {Object.keys(filters).length ?
                             <div className='bg-zinc-700 text-zinc-50 h-fit rounded mt-5 mx-16 p-5 flex flex-col gap-y-5'>
-                                <p>order: {filters.order}</p>
-                                {filters.minDate && <p>newer than: {filters.minDate}</p>}
-                                {filters.maxDate && <p>older than: {filters.maxDate}</p>}
-                                {filters.template && <p>template: {filters.template}</p>}
+                                <p>{polish ? 'porządek:' : 'order:'} {filters.order}</p>
+                                {filters.minDate && <p>{polish ? 'nowsze niż:' : 'newer than:'} {filters.minDate}</p>}
+                                {filters.maxDate && <p>{polish ? 'starsze niż:' : 'older than:'} {filters.maxDate}</p>}
+                                {filters.template && <p>{polish ? 'zawierające:' : 'template:'} {filters.template}</p>}
                             </div>
                             : null
                         }
@@ -128,13 +130,13 @@ const CommentsList = () => {
                                     <div>{comment.comment}</div>
                                     <div className='text-zinc-300 text-right text-sm'>{new Date(comment.date).toLocaleString()}</div>
                                 </div>
-                                {admin && <button className='hover:bg-zinc-200 outline outline-3 outline-rose-500 p-2 rounded-lg' onClick={() => dispatch(deleteComment(comment._id))}>DEL</button>}
+                                {admin && <button className='hover:bg-zinc-200 outline outline-3 outline-rose-500 p-2 rounded-lg' onClick={() => dispatch(deleteComment(comment._id))}>{polish ? 'USUŃ' : 'DEL'}</button>}
                             </div>
 
                         ))}
                         <div className='flex justify-end gap-10'>
-                            {page > 0 && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/comments/${page - 1}`)}>Previous</button>}
-                            {page + 1 < (comments.length / num) && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/comments/${page + 1}`)}>Next</button>}
+                            {page > 0 && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/comments/${page - 1}`)}>{polish ? 'Poprzednie' : 'Previous'}</button>}
+                            {page + 1 < (comments.length / num) && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/comments/${page + 1}`)}>{polish ? 'Następne' : 'Next'}</button>}
                         </div>
                     </div>
                 </div>

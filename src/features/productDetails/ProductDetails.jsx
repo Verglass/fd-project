@@ -7,6 +7,7 @@ import { selectAvgScoreById, fetchScores } from '../scores/scoresSlice'
 import { selectDeliveryOptions, fetchDeliveryOptions } from '../deliveryOptions/deliveryOptionsSlice'
 import { selectAdmin } from '../layout/adminSlice'
 import { selectUserToken, addProductToCart } from '../cart/cartSlice'
+import { selectLanguage } from '../layout/languageSlice'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import ScoreDisplay from '../scores/ScoreDisplay'
 import ScoreInput from '../scores/ScoreInput'
@@ -23,6 +24,7 @@ const ProductDetails = () => {
     const deliveryOptions = useSelector(selectDeliveryOptions)
     const admin = useSelector(selectAdmin)
     const userToken = useSelector(selectUserToken)
+    const polish = useSelector(selectLanguage)
 
     useEffect(() => {
         if (!product) dispatch(fetchDetails(productId))
@@ -63,16 +65,16 @@ const ProductDetails = () => {
                                             <Field name="quantity" type="number" />
                                         </div>
                                         <div className='flex flex-col gap-y-5'>
-                                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 h-fit p-2 rounded' type="submit" disabled={isSubmitting}>Add to cart</button>
+                                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 h-fit p-2 rounded' type="submit" disabled={isSubmitting}>{polish ? 'Dodaj do koszyka' : 'Add to cart'}</button>
                                         </div>
                                     </Form>
                                 )}
                             </Formik>
                             <div className='text-right'>
-                                <div className='font-bold  text-zinc-600'>Price: </div>
+                                <div className='font-bold  text-zinc-600'>{polish ? 'Cena: ' : 'Price: '}</div>
                                 <div className='text-4xl font-bold'>${product.price}</div>
                                 <div>
-                                    <div className='font-bold  text-zinc-600'>Avrage rating: </div>
+                                    <div className='font-bold  text-zinc-600'>{polish ? 'Średnia ocena: ' : 'Avrage rating: '}</div>
                                     {avgScore !== undefined &&
                                         <div className='flex text-3xl gap-x-2'>
                                             <ScoreDisplay score={avgScore} />
@@ -82,10 +84,10 @@ const ProductDetails = () => {
                                 </div>
                             </div>
                             <div className='flex items-center gap-x-6'>
-                                {admin && <button className='bg-zinc-700 hover:bg-zinc-600 h-fit text-zinc-50 p-2 rounded' onClick={() => navigate('/deliveryOptions')}>Delivery options</button>}
+                                {admin && <button className='bg-zinc-700 hover:bg-zinc-600 h-fit text-zinc-50 p-2 rounded' onClick={() => navigate('/deliveryOptions')}>{polish ? 'Opcje dostawy' : 'Delivery options'}</button>}
                                 <div className='flex flex-col items-end'>
-                                    <div className='font-bold  text-zinc-600'>In stock: {product.quantity}</div>
-                                    <div className='font-bold text-zinc-600'>Delivery options: </div>
+                                    <div className='font-bold  text-zinc-600'>{polish ? 'Dostępne:' : 'In stock:'} {product.quantity}</div>
+                                    <div className='font-bold text-right text-zinc-600'>{polish ? 'Opcje dostawy: ' : 'Delivery options: '}</div>
                                     {deliveryOptions.map(option => (
                                         <div className='flex gap-x-2 text-zinc-500' key={option._id}>
                                             <div>{option.method}</div>
@@ -97,17 +99,17 @@ const ProductDetails = () => {
                         </div>
                     </div>
                     <div>
-                        <div className='font-bold'>Description: </div>
+                        <div className='font-bold'>{polish ? 'Opis: ' : 'Description: '}</div>
                         <div>{product.longDescription}</div>
                     </div>
                     <div className='text-xl w-full flex justify-between'>
                         <div className='flex items-end gap-x-6'>
-                            {admin && <button className='bg-rose-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => { dispatch(deleteProduct(productId)); navigate('/') }}>Delete</button>}
-                            {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/edit`)}>Edit</button>}
+                            {admin && <button className='bg-rose-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => { dispatch(deleteProduct(productId)); navigate('/') }}>{polish ? 'Usuń' : 'Delete'}</button>}
+                            {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/edit`)}>{polish ? 'Edytuj' : 'Edit'}</button>}
                         </div>
                         <div className='flex items-end gap-x-6'>
-                            {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/scores`)}>Scores</button>}
-                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/comments/0`)}>Comments</button>
+                            {admin && <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/scores`)}>{polish ? 'Oceny' : 'Scores'}</button>}
+                            <button className='bg-zinc-700 hover:bg-zinc-600 text-zinc-50 p-2 rounded' onClick={() => navigate(`/${productId}/comments/0`)}>{polish ? 'Komentarze' : 'Comments'}</button>
                             <ScoreInput />
                         </div>
                     </div>

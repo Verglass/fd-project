@@ -7,6 +7,7 @@ import commentsReducer from '../features/comments/commentsSlice'
 import productDetailsReducer from '../features/productDetails/productDetailsSlice'
 import deliveryOptionsReducer from '../features/deliveryOptions/deliveryOptionsSlice'
 import cartReducer from '../features/cart/cartSlice'
+import languageReducer from '../features/layout/languageSlice'
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         details: productDetailsReducer,
         deliveryOptions: deliveryOptionsReducer,
         cart: cartReducer,
+        language: languageReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 })
