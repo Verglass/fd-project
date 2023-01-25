@@ -20,15 +20,15 @@ const ProductsFilters = () => {
             <Formik
                 initialValues={{
                     order: 'oldest',
-                    minPrice: 0,
-                    maxPrice: 100,
-                    type: 'any',
+                    minPrice: Infinity,
+                    maxPrice: Infinity,
+                    type: 'all',
                 }}
                 validationSchema={Yup.object({
                     order: Yup.string().required('Required'),
-                    minPrice: Yup.number().required('Required'),
-                    maxPrice: Yup.number().required('Required'),
-                    type: Yup.string().required('Required'),
+                    minPrice: Yup.number(),
+                    maxPrice: Yup.number(),
+                    type: Yup.string(),
                 })}
                 onSubmit={async (values, { setSubmitting }) => {
                     await handleSubmit(values)
@@ -66,7 +66,7 @@ const ProductsFilters = () => {
                         <div id="my-radio-group">{polish ? 'typ:' : 'type:'}
                             <div className='flex flex-col' role="group" aria-labelledby="my-radio-group">
                                 <label>
-                                    <Field className='mx-2' type="radio" name="type" value="any" />
+                                    <Field className='mx-2' type="radio" name="type" value="all" />
                                     {polish ? 'wszystkie' : 'all'}
                                 </label>
                                 <label>
@@ -87,8 +87,8 @@ const ProductsFilters = () => {
             {Object.keys(filters).length ?
                 <div className='bg-zinc-700 text-zinc-50 h-fit rounded mt-5 mx-16 p-5 flex flex-col gap-y-5'>
                     <p>{polish ? 'porządek:' : 'order:'} {filters.order}</p>
-                    <p>{polish ? 'min. cena:' : 'min. price:'} {filters.minPrice}</p>
-                    <p>{polish ? 'max. cena:' : 'max. price:'} {filters.maxPrice}</p>
+                    {filters.minPrice && filters.minPrice !== Infinity && <p>{polish ? 'min. cena:' : 'min. price:'} {filters.minPrice}</p>}
+                    {filters.maxPrice && filters.maxPrice !== Infinity && <p>{polish ? 'max. cena:' : 'max. price:'} {filters.maxPrice}</p>}
                     <p>{polish ? 'typ:' : 'type:'} {filters.type}</p>
                 </div>
                 : null
