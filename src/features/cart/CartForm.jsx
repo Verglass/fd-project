@@ -4,6 +4,7 @@ import { selectDeliveryOptions } from '../deliveryOptions/deliveryOptionsSlice'
 import { selectLanguage } from '../layout/languageSlice'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import axios from '../../../api/axios'
 
 const CartForm = () => {
     const navigate = useNavigate()
@@ -29,7 +30,8 @@ const CartForm = () => {
                 city: Yup.string().required('Required'),
                 zip: Yup.string().required('Required'),
             })}
-            onSubmit={async (_values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting }) => {
+                await axios.post('/cart/checkout', values)
                 navigate('/confirm')
                 setSubmitting(false)
             }}
