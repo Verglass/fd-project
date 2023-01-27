@@ -9,6 +9,7 @@ import DeliveryOptionsList from './features/deliveryOptions/DeliveryOptionsList'
 import Cart from './features/cart/Cart'
 import CartForm from './features/cart/CartForm'
 import CartConfirm from './features/cart/CartConfirm'
+import Stats from './features/layout/Stats'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path='cart' element={<Cart />} />
           <Route path='checkout' element={<CartForm />} />
           <Route path='confirm' element={<CartConfirm />} />
+          <Route path='stats' element={<Stats />} />
         </Route>
       </Routes>
     </div>

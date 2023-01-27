@@ -22,6 +22,7 @@ const Layout = () => {
                         :
                         <button onClick={() => dispatch(adminSwitch())}>{polish ? 'administrator' : 'admin'}</button>
                     }
+                    {admin && <button onClick={() => navigate('/stats')}>{polish ? 'statystyki' : 'stats'}</button>}
                 </div>
                 <div className='h-fit px-10 self-center flex gap-10'>
                     <button onClick={() => navigate('/cart')}>{polish ? 'koszyk' : 'cart'}({cart.length})</button>
